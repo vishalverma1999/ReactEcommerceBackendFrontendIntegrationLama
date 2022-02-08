@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import styled from "styled-components"
 import { mobile } from "../responsive"
 
@@ -11,7 +12,7 @@ const Image = styled.img`
 width: 100%;
 height: 100%;   // parent container ka 100 % height, here parent container is container component of categoryItem
 object-fit: cover;  // images ka size small hone par image appearance distort ho gaya, isliye use sahi karne ke liye we cropped it as a cover image
-${mobile({height: "35vh"})}
+${mobile({ height: "35vh" })}
 `
 
 const Info = styled.div`
@@ -42,14 +43,16 @@ border: none;
 font-weight: 600;
 `
 
-const CategoryItem = ({item}) => {   // props na likhkar direct uske andar ke content ko curly braces mein likhkar pass kar diya i.e destructuring
+const CategoryItem = ({ item }) => {   // props na likhkar direct uske andar ke content ko curly braces mein likhkar pass kar diya i.e destructuring
     return (
         <Container>
-            <Image src={item.img} />
-            <Info>
-                <Title>{item.title}</Title>
-                <Button>SHOP NOW</Button>
-            </Info>
+            <Link to={`/products/${item.category}`}>
+                <Image src={item.img} />
+                <Info>
+                    <Title>{item.title}</Title>
+                    <Button>SHOP NOW</Button>
+                </Info>
+            </Link>
         </Container>
     )
 }
