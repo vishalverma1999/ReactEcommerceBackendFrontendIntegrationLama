@@ -1,0 +1,62 @@
+.widgetSmall{
+    flex: 1;
+     /*you don't have to memorize any box shadow property so you can write your box shadow generator at  https://html-css-js.com/css/generator/box-shadow/ */
+  -webkit-box-shadow: 0px 0px 11px -1px #000000;
+  box-shadow: 0px 0px 11px -1px #000000;
+  padding: 20px;
+  margin-right: 20px;
+}
+
+.widgetSmallTitle{
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.widgetSmallList{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.widgetSmallListItem{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+
+.widgetSmallImg{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;          /*The replaced content is sized to maintain its aspect ratio while filling the element's entire content box: its concrete object size is resolved as a cover constraint against the element’s used width and height.*/
+}
+
+.widgetSmallUser{
+    display: flex;
+    flex-direction: column;
+}
+
+.widgetSmallUsername{
+    font-weight: 600;
+}
+
+.widgetSmallUserTitle{
+    font-weight: 300;
+}
+
+.widgetSmallButton{
+    display: flex;
+    align-items: center;
+    border: none;
+    border-radius: 10px;
+    padding: 7px 10px;
+    background-color: #eeeef7;
+    color: #555;
+    cursor: pointer;
+}
+
+.widgetSmallButtonIcon{
+    margin-right: 5px;
+    font-size: 16px !important;
+}

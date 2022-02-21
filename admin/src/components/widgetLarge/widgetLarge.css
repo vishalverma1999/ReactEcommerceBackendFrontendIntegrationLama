@@ -1,0 +1,61 @@
+.widgetLarge{
+    flex: 2;
+     /*you don't have to memorize any box shadow property so you can write your box shadow generator at  https://html-css-js.com/css/generator/box-shadow/ */
+  -webkit-box-shadow: 0px 0px 11px -1px #000000;
+  box-shadow: 0px 0px 11px -1px #000000;
+  padding: 20px;
+}
+
+.widgetLargeTitle{
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.widgetLargeTable{
+  border-spacing: 20px;   /* 20 pixels from horizontal as well as vertical */ /*The border-spacing property sets the distance between the borders of adjacent cells. Note: This property works only when border-collapse is separate and BY default border-collapse is separate, so no need to write it explicitly  https://www.w3schools.com/cssref/pr_border-spacing.asp  https://www.w3schools.com/cssref/pr_border-collapse.asp*/
+  width: 100%;
+}
+
+.widgetLargeTh{
+  text-align: left;
+}
+
+.widgetLargeUser{
+  display: flex;
+  align-items: center;
+}
+
+.widgetLargeImg{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;          /*The replaced content is sized to maintain its aspect ratio while filling the element's entire content box: its concrete object size is resolved as a cover constraint against the element’s used width and height.*/
+  margin-right: 10px;
+}
+
+.widgetLargeDate, .widgetLargeAmount{
+  font-weight: 300;
+}
+
+.widgetLargeButton{
+  border: none;
+  border-radius: 10px;
+  padding: 5px 7px;
+}
+
+.Approved{
+  background-color: #e5faf2;
+  color: #3bb077;
+}
+
+.Pending{
+  background-color: #fff0f1;
+  color: #d95087;
+
+}
+
+.Declined{
+  background-color: #ebf1fe;
+  color: #2a7ade;
+
+}

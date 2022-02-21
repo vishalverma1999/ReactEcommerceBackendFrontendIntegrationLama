@@ -1,0 +1,42 @@
+.sidebarr{
+    flex: 1;
+    height: calc(100vh - 50px);   /*i want to make sidebar full screen but if i say 100 vh here it's gonna overflow that's because our top bar is 50 pixels here, so i can use calculate i.e. calc(), i will say height calculate and i will say 100 vh minus 50 pixels*/
+    background-color: rgb(251,251,255);
+    position: sticky;  /*i will make this sticky again because it's gonna stay here in any case*/
+    top: 50px;   /*and i'm gonna indicate my position top 50. that because it's under the top bar. it's gonna start from here so even if we scroll the page it's gonna be stay here perfect*/
+}
+
+.sidebarWrapper{
+    padding: 20px;
+    color: #555;
+}
+
+.sidebarMenu{
+    margin-bottom: 10px;
+}
+
+.sidebarTitle{
+    font-size: 13px;
+    color: lightgray;
+}
+.sidebarList{
+    list-style: none;
+    padding: 5px;
+}
+
+.sidebarListItem{
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.sidebarListItem.active, .sidebarListItem:hover{
+    background-color: rgb(240,240,250);
+}
+
+.sidebarIcon{
+    margin-right: 5px;
+    font-size: 20px !important;   /* you can see they are still in same size, so if you want to change material icon size you need to write here !important */
+}
