@@ -4,13 +4,19 @@ import Announcement from "../components/Announcement"
 import Footer from "../components/Footer"
 import { Add, Remove } from "@material-ui/icons"
 import { mobile } from "../responsive"
+import { useSelector } from "react-redux"
+import StripeCheckout from 'react-stripe-checkout'
+import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 
+
+const KEY = "pk_test_51KAcNdSCSjhmXZtkqXPpTHzIr6qfJhJM1kKlsQrAv2YQqdMAB6aYKfCaIwyVNlucXXsYB6Plc0ItEyk1cODJTATn00JUDqulQv";
 
 const Container = styled.div``
 
 const Wrapper = styled.div`
 padding: 20px;
-${mobile({padding: "10px"})}
+${mobile({ padding: "10px" })}
 `
 
 const Title = styled.h1`
@@ -35,7 +41,7 @@ border: ${props => props.type === "filled" && "none"};
 `
 
 const TopTexts = styled.div`
- ${mobile({display: "none"})}   
+ ${mobile({ display: "none" })}   
 `
 
 const TopText = styled.span`
@@ -47,7 +53,7 @@ const TopText = styled.span`
 const Bottom = styled.div`
 display: flex;
 justify-content: space-between;
-${mobile({flexDirection: "column"})}
+${mobile({ flexDirection: "column" })}
 `
 const Info = styled.div`
 flex: 3;
@@ -56,7 +62,7 @@ flex: 3;
 const Product = styled.div`
 display: flex;
 justify-content: space-between;
-${mobile({flexDirection: "column"})}
+${mobile({ flexDirection: "column" })}
 `
 
 const ProductDetail = styled.div`
@@ -105,12 +111,12 @@ margin-bottom: 20px;
 const ProductAmount = styled.div`
 font-size: 24px;
 margin: 5px;
-${mobile({margin: "5px 15px"})}
+${mobile({ margin: "5px 15px" })}
 `
 const ProductPrice = styled.div`
 font-size: 30px;
 font-weight: 300;
-${mobile({margin: "20px"})}
+${mobile({ margin: "20px" })}
 
 `
 
@@ -136,8 +142,8 @@ display: flex;
 /* align-items: center; */
 justify-content: space-between;
 margin: 30px 0px;
-font-weight: ${props=> props.type === "total" && 500};    // or can be wriiten as- font-weight: ${props=> props.type === "total" && "500"};
-font-size: ${props=> props.type === "total" && 24}px;     // or can be wriiten as- font-size: ${props=> props.type === "total" && "24px"};
+font-weight: ${props => props.type === "total" && 500};    // or can be wriiten as- font-weight: ${props => props.type === "total" && "500"};
+font-size: ${props => props.type === "total" && 24}px;     // or can be wriiten as- font-size: ${props => props.type === "total" && "24px"};
 
 `
 
@@ -161,6 +167,44 @@ cursor: pointer;
 // const SummaryTitle = styled.div``
 
 const Cart = () => {
+
+    const cart = useSelector(state => state.cart);
+    console.log(cart);
+
+    const [stripeToken, setStripeToken] = useState(null);
+
+    const onToken = (token) => {
+        setStripeToken(token);
+    }
+    console.log(stripeToken);
+
+    // to go to success page after payment, for that use history hook
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const makeRequest = async () => {
+            try {
+                // POST request using fetch with async/await
+                console.log("success navigation");
+                const requestOptions = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ tokenId: stripeToken.id, amount: 500 })
+                };
+                const response = await fetch('http://localhost:5000/api/checkout/payment', requestOptions);
+                const data = await response.json();
+                console.log(data);
+                // navigating to success page
+                navigate("/success", { data: data });
+            }
+            catch (error) {
+                console.log(error);
+            }
+        };
+        stripeToken && makeRequest();
+    }, [stripeToken, cart.total, navigate])
+
+
     return (
         <Container>
             <Navbar />
@@ -181,47 +225,31 @@ const Cart = () => {
                 <Bottom>
 
                     <Info>
-                        <Product>
-                            <ProductDetail>
-                                <Image src="https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1619487269-tr3mmst080-shoe-angle-global-mens-tree-runner-mist-white-b11537e4-5c45-4443-a1dd-c70c31779715-png-1619487255.jpg?crop=1xw:1xh;center,top&resize=480:*" />
-                                <Details>
-                                    <ProductName><b>Product:</b> JESSIE THUNDER SHOES</ProductName>
-                                    <ProductId><b>ID:</b> 9639807270</ProductId>
-                                    <ProductColor color="gray" ></ProductColor>
-                                    <ProductSize><b>Size:</b> 37.5</ProductSize>
-                                </Details>
-                            </ProductDetail>
-                            <PriceDetail>
-                                <ProductAmountContainer>
-                                    <Add />
-                                    <ProductAmount>2</ProductAmount>
-                                    <Remove />
-                                </ProductAmountContainer>
-                                <ProductPrice>$ 50</ProductPrice>
-                            </PriceDetail>
-                        </Product>
+                        {cart.products.map(product => (
+
+                            <Product key={product._id}>
+                                <ProductDetail>
+                                    <Image src={product.img} />
+                                    <Details>
+                                        <ProductName><b>Product:</b> {product.title}</ProductName>
+                                        <ProductId><b>ID:</b> {product._id}</ProductId>
+                                        <ProductColor color={product.color} ></ProductColor>
+                                        <ProductSize><b>Size:</b> {product.size}</ProductSize>
+                                    </Details>
+                                </ProductDetail>
+                                <PriceDetail>
+                                    <ProductAmountContainer>
+                                        <Add />
+                                        <ProductAmount>{product.quantity}</ProductAmount>
+                                        <Remove />
+                                    </ProductAmountContainer>
+                                    <ProductPrice>$ {product.price * product.quantity}</ProductPrice>
+                                </PriceDetail>
+                            </Product>
+                        ))};
 
                         <Hr></Hr>
 
-                        <Product>
-                            <ProductDetail>
-                                <Image src="https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1619487269-tr3mmst080-shoe-angle-global-mens-tree-runner-mist-white-b11537e4-5c45-4443-a1dd-c70c31779715-png-1619487255.jpg?crop=1xw:1xh;center,top&resize=480:*" />
-                                <Details>
-                                    <ProductName><b>Product:</b> JESSIE THUNDER SHOES</ProductName>
-                                    <ProductId><b>ID:</b> 9639807270</ProductId>
-                                    <ProductColor color="gray" ></ProductColor>
-                                    <ProductSize><b>Size:</b> 37.5</ProductSize>
-                                </Details>
-                            </ProductDetail>
-                            <PriceDetail>
-                                <ProductAmountContainer>
-                                    <Add />
-                                    <ProductAmount>2</ProductAmount>
-                                    <Remove />
-                                </ProductAmountContainer>
-                                <ProductPrice>$ 50</ProductPrice>
-                            </PriceDetail>
-                        </Product>
                     </Info>
 
 
@@ -231,7 +259,7 @@ const Cart = () => {
                         <SummaryTitle>ORDER SUMMARY</SummaryTitle>
                         <SummaryItem>
                             <SummaryItemText>Subtotal</SummaryItemText>
-                            <SummaryItemPrice>$ 80</SummaryItemPrice>
+                            <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
                         </SummaryItem>
                         <SummaryItem>
                             <SummaryItemText>Estimated Shipping</SummaryItemText>
@@ -243,10 +271,24 @@ const Cart = () => {
                         </SummaryItem>
                         <SummaryItem type="total">
                             <SummaryItemText >Total</SummaryItemText>
-                            <SummaryItemPrice>$ 80</SummaryItemPrice>
+                            <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
                         </SummaryItem>
 
-                        <SummaryButton>CHECKOUT NOW</SummaryButton>
+                        <StripeCheckout name='MUnnuDada'
+                            image='https://cdn.dribbble.com/users/6192700/screenshots/14682400/media/895972e3e8316a62c6eee7b13a4421e2.png?compress=1&resize=50x50'
+                            billingAddress
+                            shippingAddress
+                            description={`Your total is INR ${cart.total}`}
+                            amount={cart.total * 100}    // it's going to be 20 but stripe working on cents so you should add here two more zero that is 20.00
+                            token={onToken}
+                            stripeKey={KEY}
+
+                        >
+                            <SummaryButton>
+                                    Checkout Now
+                            </SummaryButton>
+
+                        </StripeCheckout>
                     </Summary>
 
                 </Bottom>
@@ -257,3 +299,6 @@ const Cart = () => {
 }
 
 export default Cart
+
+
+// style={{ border: "none", width: 120, borderRadius: 5, padding: "20px", backgroundColor: "black", color: "white", fontWeight: "600", cursor: "pointer" }}

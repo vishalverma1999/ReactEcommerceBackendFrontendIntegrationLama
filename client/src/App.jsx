@@ -6,11 +6,13 @@ import Cart from "./pages/Cart";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import SingleProduct from "./pages/SingleProduct";
+import Success from "./pages/Success";
+import { useSelector } from "react-redux";
 
 
 const App = () => {
 
-  const isUserLoggedIn = true;
+  const isUserLoggedIn = useSelector((state)=> state.user.currentUser);
 
   return (
     <>
@@ -21,6 +23,7 @@ const App = () => {
           <Route path="/products/:category" element={<ProductList />} />
           <Route path="/product/:id" element={<SingleProduct />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/success" element={<Success />} />
 
           {/* agar user logged in hai to use login aur register waale pages nahi dikhne chaiye */}
           <Route path="/login" element={isUserLoggedIn ? <Navigate to="/" /> : <Login />} />    {/*Redirect to in v6 chnges to Navigate to*/}

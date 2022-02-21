@@ -15,7 +15,7 @@ router.post("/payment", (req, res) => {
         // i'm gonna write my req.body(totally 3 requestd we are goona make source,amount,currency) inside create, what it's going to include it's going to include our source first. source is going to be request and body i will say token id, then we make any payment the stripe is gonna return us a token id so we are gonna use it here.
         source: req.body.tokenId,
         amount: req.body.amount,
-        currency: "INR",
+        currency: "USD",
         // After create object it's gonna return us either an error or successful response so let's write here stripe error and stripe response
     }, (stripeErr, stripeRes) => {   
 

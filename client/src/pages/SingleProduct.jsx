@@ -7,6 +7,8 @@ import { Add, Remove } from "@material-ui/icons"
 import { mobile } from "../responsive"
 import { useLocation } from "react-router-dom"
 import { useState, useEffect } from "react"
+import { useDispatch } from "react-redux"
+import { addProduct } from "../redux/cartRedux"
 
 const Container = styled.div`
 `
@@ -117,19 +119,20 @@ const SingleProduct = () => {
     const productId = location.pathname.split(":")[1];     // pata nahi product page par route karne par colon id ke peeche chipak ke kyu aa raha hai like --> :6200281ff210a3c8a14038df
 
     // setting singleproduct
-    const [singleproduct, setsingleproduct] = useState({});   // initially put it empty object or empty array does not matter
+    const [singleproduct, setsingleproduct] = useState([]);   // initially put it empty object or empty array does not matter
     const [loading, setLoading] = useState(true);
     const [quantity, setquantity] = useState(1);
     const [color, setcolor] = useState("");
     const [size, setsize] = useState("");
-
+    const dispatch = useDispatch();
+    // console.log("THE SINGLE PRODUCT IS " + singleproduct);
 
     useEffect(() => {
         const getSingleProduct = async () => {
             try {
                 const response = await fetch("http://localhost:5000/api/products/find/" + productId);
                 const data = await response.json();
-                console.log(data);
+                // console.log(data);
                 setsingleproduct(data);
                 // data fetch hote hi and state set hote hi loading ko false kardiya aur ab mapping ho jayegi
                 setLoading(false);
@@ -153,8 +156,10 @@ const SingleProduct = () => {
         }
     }
 
-    const handleClick = ()=>{
+    const handleClick = () => {
         // update cart, for that we will use redux
+        // quantity  is the quantity of the product and not of the cart
+        dispatch(addProduct({ ...singleproduct, quantity, color, size }));    // passing the payload to addProduct action using dispatch hook
     }
 
     return (
@@ -175,7 +180,7 @@ const SingleProduct = () => {
                             {/* either use the method of setting loading state to resolve the problem of mapping before fetching or use optional chaining(?) used in size mapping */}
                             {!loading &&
                                 singleproduct.color.map((col) => (
-                                    <FilterColor color={col} key={col} onClick={()=>{setcolor(col); console.log(col)}} ></FilterColor>
+                                    <FilterColor color={col} key={col} onClick={() => { setcolor(col); console.log(col) }} ></FilterColor>
                                 ))}
                         </Filter>
                         <Filter>
@@ -183,7 +188,7 @@ const SingleProduct = () => {
                             {/* Article when mapping done on null useState https://typeofnan.dev/fix-cannot-read-property-map-of-undefined-error-in-react/ */}
                             {/* mount hote hi return chal jayega isliye loading initially true hai */}
                             {/* optional chaninig   https://www.freecodecamp.org/news/how-the-question-mark-works-in-javascript/ */}
-                            <Select defaultValue={"XS"} onChange={(e)=>{setsize(e.target.value); console.log(size)}} >
+                            <Select defaultValue={"XS"} onChange={(e) => { setsize(e.target.value); console.log(size) }} >
                                 {singleproduct.size?.map(sz => (
                                     <Option key={sz}>{sz}</Option>
                                 ))}
